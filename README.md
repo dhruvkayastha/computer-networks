@@ -3,7 +3,9 @@ Multi-threaded Networking applications such as a simplified FTP, and reliable TC
 
 ## UDP & TCP sockets
 udp-sockets & tcp-sockets contain the implementation of a client and server which can be used to fetch small files from the server through the respective protocol.
+
 block-based-file transfer contains implementation of a TCP client and server which transfers files in blocks of a fixed size.
+
 asynchronous-io contains a UDP echo server and client which uses a **signal driven** handler for I/O.
 
 ## Concurrent Server
@@ -21,7 +23,9 @@ An iterative FTP server which services the commands:
 
 ## Reliable Communication over an Unreliable Link
 An API is built for a MRP (My Reliable Protocol) socket, which guarantees that any message sent using a MRP socket is always delivered to the receiver exactly once. However, unlike TCP sockets, MRP sockets may not guarantee in-order delivery of messages. Thus messages may be delivered out of order. UDP is used as the unreliable link. 
+
 For simulation and testing purposes, messages over the unreliable UDP linked are forcefully dropped with *P* probability.
+
 Refer to *documentation.txt* in the folder for more details regarding the multi-threaded implementation.
 
 ## Traceroute
