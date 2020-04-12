@@ -1,0 +1,57 @@
+Dhruv Kayastha
+
+-----------------------------------------------------------
+
+MRP DOCUMENTATION
+
+┌─────────────────┬─────────────────────────┐
+│ Drop Prob (p)   │ Avg no of transmissions │
+├─────────────────┼─────────────────────────┤
+├─────────────────┼─────────────────────────┤
+│ 0.05 			  │ 1.068966                │
+├─────────────────┼─────────────────────────┤
+│ 0.10 			  │ 1.322581                │
+├─────────────────┼─────────────────────────┤
+│ 0.15 			  │ 1.423077                │
+├─────────────────┼─────────────────────────┤
+│ 0.20 			  │ 1.457627                │
+├─────────────────┼─────────────────────────┤
+│ 0.25 			  │ 1.521739                │
+├─────────────────┼─────────────────────────┤
+│ 0.30 			  │ 1.800000                │
+├─────────────────┼─────────────────────────┤
+│ 0.35 			  │ 2.055556	            │
+├─────────────────┼─────────────────────────┤
+│ 0.40 			  │ 2.603175	            │
+├─────────────────┼─────────────────────────┤
+│ 0.45 			  │ 3.466667	            │
+├─────────────────┼─────────────────────────┤
+│ 0.50 			  │ 3.790698                │
+└─────────────────┴─────────────────────────┘
+
+The avg no of transmissions per message that I encountered per message is approx 1/(1-p)^2, as expected.
+
+
+Message format (char* being sent by sendto call):
+	char* buff[messagelength + 2]
+	buff[0] is 'A' for ACK, 'M' for Message being sent to user2
+	buff[1] stores the sequence no (id). The id is a number less than 100 (assumption in question that 100 messages are being sent), so this value fits into 1 single byte and can be stored in buff[1] as id%256
+
+	ACK message is of form {'A', (lowest byte of id)}
+	Message is of form {'M', (lowest byte of id), msg.....}
+
+
+Data Structures:
+	Unack_msg_table <- array of unack_msg indexed by id (stores all the unacknowledged messages). 
+	
+	unack_msg <- structure that stores the unacknowledged message content, sequence no, last send time, IP-Port (dest addr), flags, addrlen and len (message length), so that the sendto call can have the required parameters during retransmission of the unacknowledged messages. bool isUnack notifies if the message has been ACK or not.
+	
+	recv_buffer <- circular queue of message data structure, that stores the messages that are popped out to the r_recvfrom call
+	
+	message <- the primitive structure of the circular queue that stores the source address, sequence no, and content of the string to be sent
+
+	recv_msg_id <- array
+	recv_msg_id[i] = 1 if message has been received, else 0
+	This table is used to keep a check on duplicate messages
+
+Note: Mutex locks are created for every data structure, as well as for the number of transmissions. pthread_cond is used while waiting if the recv_buffer is empty (so there is nothing to extract)
