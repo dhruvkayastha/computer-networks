@@ -30,3 +30,13 @@ Refer to *documentation.txt* in the folder for more details regarding the multi-
 
 ## Traceroute
 A custom version of the Linux traceroute tool for identifying the number of layer 3 (IP layer) hops from your machine to a given destination, which has been built using raw sockets.
+
+## Ping
+A custom version of ping utility which can be used to check the connectivity status between a source and a destination over an IP network, using ICMP requests. Includes support for:
+* -t ttl
+* -i interval
+* -c count
+* -W timeout
+* -s packetsize
+* -w deadline
+
