@@ -40,3 +40,5 @@ A custom version of ping utility which can be used to check the connectivity sta
 * -s packetsize
 * -w deadline
 
+## HTTP Server
+A concurrent multithreaded HTTP Server that can handle GET and HEAD requests.
